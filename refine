@@ -149,7 +149,15 @@ check_pywin32() {
 
 check_running() {
     check_downloaders
-    URL="http://${REFINE_HOST}:${REFINE_PORT}/"
+
+    echo REFINE HOST IS "${REFINE_HOST}"
+    if [ "0.0.0.0" = "${REFINE_HOST}" ] ; then
+        URL="http://127.0.0.1:${REFINE_PORT}/"
+    else
+        URL="http://${REFINE_HOST}:${REFINE_PORT}/"
+    fi
+    echo URL IS "$URL"
+
     CHECK_STR="<title>OpenRefine</title>"
 
     if [ "$CURL" ] ; then
