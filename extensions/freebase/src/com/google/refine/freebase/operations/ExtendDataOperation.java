@@ -205,7 +205,11 @@ public class ExtendDataOperation extends EngineDependentOperation {
                     if (cell != null && cell.recon != null && cell.recon.match != null) {
                         _rowIndices.add(rowIndex);
                     }
-                    
+                    // Kew workaround: allow using MQL without a reconciliation result
+                    else if (cell != null && cell.value != null) {
+                        _rowIndices.add(rowIndex);
+                    }
+
                     return false;
                 }
             }.init(rowIndices));
@@ -226,7 +230,13 @@ public class ExtendDataOperation extends EngineDependentOperation {
                 Row row = _project.rows.get(index);
                 Cell cell = row.getCell(_cellIndex);
                 
-                ids.add(cell.recon.match.id);
+                if (cell != null && cell.recon != null && cell.recon.match != null) {
+                    ids.add(cell.recon.match.id);
+                }
+                // Kew workaround: allow using MQL without a reconciliation result
+                else if (cell != null && cell.value != null) {
+                    ids.add(cell.value.toString());
+                }
             }
             
             Map<String, DataExtension> map = null;
@@ -240,7 +250,15 @@ public class ExtendDataOperation extends EngineDependentOperation {
                 int index = rowIndices.get(i);
                 Row row = _project.rows.get(index);
                 Cell cell = row.getCell(_cellIndex);
-                String guid = cell.recon.match.id;
+                String guid = null;
+
+                if (cell != null && cell.recon != null && cell.recon.match != null) {
+                    guid = cell.recon.match.id;
+                }
+                // Kew workaround: allow using MQL without a reconciliation result
+                else if (cell != null && cell.value != null) {
+                    guid = cell.value.toString();
+                }
                 
                 if (map.containsKey(guid)) {
                     dataExtensions.add(map.get(guid));

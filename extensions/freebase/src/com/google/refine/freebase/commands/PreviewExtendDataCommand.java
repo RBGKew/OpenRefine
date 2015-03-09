@@ -94,6 +94,12 @@ public class PreviewExtendDataCommand extends Command {
                         topicNames.add(cell.recon.match.name);
                         topicIds.add(cell.recon.match.id);
                         ids.add(cell.recon.match.id);
+                    } else if (cell != null && cell.value != null) {
+                        // Kew workaround: allow using MQL without a reconciliation result
+                        String value = cell.value.toString();
+                        topicNames.add(value);
+                        topicIds.add(value);
+                        ids.add(value);
                     } else {
                         topicNames.add(null);
                         topicIds.add(null);
